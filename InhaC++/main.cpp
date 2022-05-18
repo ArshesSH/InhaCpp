@@ -1,10 +1,8 @@
-#include "Chapter2.h"
+#include "Chapter2n3.h"
 
 int main()
 {
-	Chapter2::FirstEx();
-
-
+	Chapter2::Exercise7();
 
 	return 0;
 }

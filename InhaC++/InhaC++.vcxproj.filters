@@ -24,12 +24,18 @@
     <ClCompile Include="Chapter4.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Chapter5n6.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chapter2n3.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Chapter4.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Chapter5n6.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

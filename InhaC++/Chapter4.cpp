@@ -201,6 +201,50 @@ void Chapter4::Exercise569()
 	delete[] pSnack;
 }
 
+void Chapter4::Exercise7()
+{
+	struct PizzaInfo
+	{
+		char companyName[BUFSIZ];
+		float diameter;
+		float weight;
+	};
+
+	PizzaInfo tmpPizza;
+	std::cout << "- Input Pizza Data -\n" << "Input Pizza Company : ";
+	std::cin.getline( tmpPizza.companyName, BUFSIZ );
+	std::cout << "Input Pizza's diameter : ";
+	std::cin >> tmpPizza.diameter;
+	std::cout << "Input Pizza's weight : ";
+	std::cin >> tmpPizza.weight;
+
+	std::cout << "Pizza Company : " << tmpPizza.companyName << "\nDiameter : " << tmpPizza.diameter <<
+		"\nWeight : " << tmpPizza.weight << std::endl;
+}
+
+void Chapter4::Exercise8()
+{
+	struct PizzaInfo
+	{
+		char companyName[BUFSIZ];
+		float diameter;
+		float weight;
+	};
+
+	PizzaInfo* pTmpPizza = new PizzaInfo;
+
+	std::cout << "- Input Pizza Data -\n" << "Input Pizza's diameter : ";
+	std::cin >> pTmpPizza->diameter;
+	std::cin.get();
+	std::cout << "Input Pizza Company : ";
+	std::cin.getline( pTmpPizza->companyName, BUFSIZ );
+	std::cout << "Input Pizza's weight : ";
+	std::cin >> pTmpPizza->weight;
+
+	std::cout << "Pizza Company : " << pTmpPizza->companyName << "\nDiameter : " << pTmpPizza->diameter <<
+		"\nWeight : " << pTmpPizza->weight << std::endl;
+}
+
 
 char* Chapter4::GetName()
 {

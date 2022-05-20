@@ -12,6 +12,8 @@ public:
 	static void DeleteChar();
 	static void Choices();
 	static void Exercise569();
+	static void Exercise7();
+	static void Exercise8();
 private:
 	static char* GetName();
 };

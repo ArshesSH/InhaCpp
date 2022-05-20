@@ -3,7 +3,7 @@
 
 int main()
 {
-	Chapter4::Exercise569();
+	Chapter4::Exercise8();
 
 	return 0;
 }

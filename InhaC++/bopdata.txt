@@ -1,0 +1,4 @@
+F:Wimp Macho T:asdf I:wasf P:0
+F:Raki Rhodes T:bye I:bye123 P:1
+F:wdf Rhodes T:sdvc I:1234df P:2
+F:lee woo seok T:babo I:lws P:0

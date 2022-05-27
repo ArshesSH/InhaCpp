@@ -287,6 +287,35 @@ private:
 	int tableSize = 0;
 };
 
+class ResultTable
+{
+public:
+	ResultTable() = default;
+	ResultTable( size_t pos )
+	{
+		PushPos( pos );
+	}
+
+	void PushPos( size_t pos )
+	{
+		count++;
+		posList.push_back( pos );
+	}
+
+	size_t GetCount() const
+	{
+		return count;
+	}
+	const std::vector<size_t>& GetPosList() const
+	{
+		return posList;
+	}
+
+private:
+	size_t count = 0;
+	std::vector<size_t> posList;
+};
+
 void Chapter9::Question4()
 {
 	// Create ItemList
@@ -304,25 +333,18 @@ void Chapter9::Question4()
 	// Print Main script
 	std::cout << "¾ÆÀÌÅÛ È®·ü »Ì±â\n";
 	std::cout << "È½¼ö ÀÔ·Â(100ÀÌ»ó): ";
-	int cnt;
-	std::cin >> cnt;
+	int maxCnt;
+	std::cin >> maxCnt;
 
 	std::random_device rd;
 	std::mt19937 rng( rd() );
 	std::uniform_int_distribution<int> itemRand( 0, itemCnt - 1 );
 
-	std::vector<ItemID> acquisitionList;
-	acquisitionList.reserve( itemCnt );
+	std::vector<ResultTable> resultList( (int)ItemID::Count );
 
 	// for loop as cnt
-	for ( int i = 1; i <= cnt; )
+	for ( int tryCnt = 1; tryCnt <= maxCnt; )
 	{
-		// Reset Table
-		if (i % 100 == 0)
-		{
-			itemTable = originItemTable;
-		}
-
 		// Get Random Number
 		int randNum = itemRand( rng );
 		// If No Data at random	pos, continue and get new random value
@@ -333,81 +355,30 @@ void Chapter9::Question4()
 
 		// Get Data from randomNum
 		const ItemID curId = itemTable.GetItem( randNum );
-		acquisitionList.push_back( curId );
+		resultList[(int)curId].PushPos( tryCnt );
 
-		std::cout << i << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
+		std::cout << tryCnt << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
 
-		i++;
-	}
-
-	struct ResultTable
-	{
-		ResultTable(size_t count, size_t pos)
-			:
-			count(count),
-			pos(pos)
-		{}
-
-		size_t count = 0;
-		size_t pos = 0;
-	};
-
-	std::vector<std::vector<ResultTable>> resultList( (int)ItemID::Count );
-
-	std::vector<ResultTable> resultA;
-	std::vector<ResultTable> resultB;
-	std::vector<ResultTable> resultC;
-	std::vector<ResultTable> resultD;
-	std::vector<ResultTable> resultE;
-	std::vector<ResultTable> resultF;
-	std::vector<ResultTable> resultG;
-	std::vector<ResultTable> resultH;
-	std::vector<ResultTable> resultI;
-	std::vector<ResultTable> resultJ;
-	std::vector<ResultTable> resultK;
-
-	// Set Count of Result
-	for (size_t i = 0; i < acquisitionList.size(); i++)
-	{
-		switch (acquisitionList[i])
+		// Reset Table
+		if (tryCnt % 100 == 0)
 		{
-		case ItemID::A:
-			resultA.emplace_back( acquisitionList[i], i  );
-			break;
-		case ItemID::B:
-			resultB.emplace_back( acquisitionList[i], i );
-			break;
-		case ItemID::C:
-			resultC.emplace_back( acquisitionList[i], i );
-			break;
-		case ItemID::D:
-			resultD.emplace_back( acquisitionList[i], i );
-			break;
-		case ItemID::E:
-			resultE.emplace_back( acquisitionList[i], i );
-			break;
-		case ItemID::F:
-			resultF.emplace_back( acquisitionList[i], i );
-			break;
-		case ItemID::G:
-			resultG.emplace_back( acquisitionList[i], i );
-			break;
-		case ItemID::H:
-			resultH.emplace_back( acquisitionList[i], i );
-			break;
-		case ItemID::I:
-			resultI.emplace_back( acquisitionList[i], i );
-			break;
-		case ItemID::J:
-			resultJ.emplace_back( acquisitionList[i], i );
-			break;
-		case ItemID::K:
-			resultK.emplace_back( acquisitionList[i], i );
-			break;
+			itemTable = originItemTable;
 		}
+
+		tryCnt++;
 	}
+
+	std::cout << std::endl;
 
 	// print result
-	printf( "Item A : %d°³, À§Ä¡:", resultA.size() );
+	for (int i = 0; i < (int)ItemID::Count; i++)
+	{
+		std::cout << char( i + 'A' ) << "-Item\nÈ¹µæ °³¼ö: " << resultList[i].GetCount() << "\nÈ¹µæ À§Ä¡: \n";
+		for (auto e : resultList[i].GetPosList())
+		{
+			std::cout << e << " ";
+		}
+		std::cout <<"\n" << std::endl;
+	}
 
 }

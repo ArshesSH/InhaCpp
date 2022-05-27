@@ -145,6 +145,7 @@
     <ClCompile Include="Chapter5n6.cpp" />
     <ClCompile Include="Chapter7.cpp" />
     <ClCompile Include="Chapter8.cpp" />
+    <ClCompile Include="Chapter9.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +154,9 @@
     <ClInclude Include="Chapter5n6.h" />
     <ClInclude Include="Chapter7.h" />
     <ClInclude Include="Chapter8.h" />
+    <ClInclude Include="Chapter9.h" />
+    <ClInclude Include="Circle.h" />
+    <ClInclude Include="Rect.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
   </ItemGroup>

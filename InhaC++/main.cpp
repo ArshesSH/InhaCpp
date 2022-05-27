@@ -3,7 +3,10 @@
 
 int main()
 {
-	Chapter9::Question4();
+	while (true)
+	{
+		Chapter9::Question4();
+	}
 
 
 	return 0;

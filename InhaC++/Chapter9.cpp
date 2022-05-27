@@ -6,6 +6,8 @@
 #include <random>
 #include <vector>
 #include <string>
+#include "ItemTable.h"
+#include "ItemResultTable.h"
 
 /*
 * Q1.
@@ -221,128 +223,39 @@ void Chapter9::Question3()
 * >A:10, B:30, C:30, D:50
 */
 
-enum class ItemID
-{
-	NoData = -1,
-	A,
-	B,
-	C,
-	D,
-	E,
-	F,
-	G,
-	H,
-	I,
-	J,
-	K,
-	Count
-};
-
-struct ItemInform
-{
-	ItemInform( ItemID id, int percentage )
-		:
-		id(id),
-		percentage(percentage)
-	{}
-
-	ItemID id;
-	int percentage;
-};
-
-class ItemTable
-{
-public:
-	ItemTable( const std::vector<ItemInform>& itemList, int tableSize )
-		:
-		tableSize(tableSize)
-	{
-		// Reserve itemDistributionList
-		itemDistributionList.reserve( tableSize );
-
-		// Set itemDistributionList by percentage of itemList
-		for ( auto e : itemList )
-		{
-			for ( int i = 0; i < e.percentage; i++ )
-			{
-				itemDistributionList.push_back( e.id );
-			}
-		}
-	}
-
-	ItemID GetItem(int pos)
-	{
-		const ItemID id = itemDistributionList[pos];
-		itemDistributionList[pos] = ItemID::NoData;
-		return id;
-	}
-
-	bool CheckItemIsNoData( int pos ) const
-	{
-		return itemDistributionList[pos] == ItemID::NoData;
-	}
-
-private:
-	std::vector<ItemID> itemDistributionList;
-	int tableSize = 0;
-};
-
-class ResultTable
-{
-public:
-	ResultTable() = default;
-	ResultTable( size_t pos )
-	{
-		PushPos( pos );
-	}
-
-	void PushPos( size_t pos )
-	{
-		count++;
-		posList.push_back( pos );
-	}
-
-	size_t GetCount() const
-	{
-		return count;
-	}
-	const std::vector<size_t>& GetPosList() const
-	{
-		return posList;
-	}
-
-private:
-	size_t count = 0;
-	std::vector<size_t> posList;
-};
-
 void Chapter9::Question4()
 {
 	// Create ItemList
-	const std::vector<ItemInform> itemList = { ItemInform( ItemID::A, 1 ), ItemInform( ItemID::B, 3 ), ItemInform( ItemID::C, 3 ),
-		ItemInform( ItemID::D, 5 ),ItemInform( ItemID::E, 5 ),ItemInform( ItemID::F, 5 ),ItemInform( ItemID::G, 10 ),
-		ItemInform( ItemID::H, 10 ),ItemInform( ItemID::I, 10 ),ItemInform( ItemID::J, 10 ),ItemInform( ItemID::K, 38 )
+	const std::vector<ItemTable::ItemInfo> itemInfos = { ItemTable::ItemInfo( ItemID::A, 1 ), ItemTable::ItemInfo( ItemID::B, 3 ), ItemTable::ItemInfo( ItemID::C, 3 ),
+		ItemTable::ItemInfo( ItemID::D, 5 ),ItemTable::ItemInfo( ItemID::E, 5 ),ItemTable::ItemInfo( ItemID::F, 5 ),ItemTable::ItemInfo( ItemID::G, 10 ),
+		ItemTable::ItemInfo( ItemID::H, 10 ),ItemTable::ItemInfo( ItemID::I, 10 ),ItemTable::ItemInfo( ItemID::J, 10 ),ItemTable::ItemInfo( ItemID::K, 38 )
 	};
 
-	const int itemCnt = 100;
+	// Size of Item Max Probability, You can skip this but it used for reserve vector
+	const int itemSize = 100;
 
 	// Create ItemTable
-	const ItemTable originItemTable( itemList, itemCnt );
-	ItemTable itemTable( itemList, itemCnt );
+	const ItemTable originItemTable( itemInfos, itemSize );
+	ItemTable itemTable( itemInfos, itemSize );
 
-	// Print Main script
+	// Set MaxCnt
 	std::cout << "¾ÆÀÌÅÛ È®·ü »Ì±â\n";
 	std::cout << "È½¼ö ÀÔ·Â(100ÀÌ»ó): ";
 	int maxCnt;
 	std::cin >> maxCnt;
 
+	// Create Random Engine (0 ~ ItemSize - 1)
 	std::random_device rd;
 	std::mt19937 rng( rd() );
-	std::uniform_int_distribution<int> itemRand( 0, itemCnt - 1 );
+	std::uniform_int_distribution<int> itemRand( 0, (int)itemTable.GetSize() - 1 );
 
-	std::vector<ResultTable> resultList( (int)ItemID::Count );
+	/*
+	* Create ResultTable List
+	* ResultTable has count of ItemID::Somthing and it's position
+	*/ 
+	std::vector<ItemResultTable> resultList( (int)ItemID::Count );
 
-	// for loop as cnt
+	// for loop as tryCnt to Gacha
 	for ( int tryCnt = 1; tryCnt <= maxCnt; )
 	{
 		// Get Random Number
@@ -357,10 +270,11 @@ void Chapter9::Question4()
 		const ItemID curId = itemTable.GetItem( randNum );
 		resultList[(int)curId].PushPos( tryCnt );
 
+		// Log data
 		std::cout << tryCnt << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
 
-		// Reset Table
-		if (tryCnt % 100 == 0)
+		// Reset ItemTable
+		if (tryCnt % itemTable.GetSize() == 0)
 		{
 			itemTable = originItemTable;
 		}
@@ -370,7 +284,7 @@ void Chapter9::Question4()
 
 	std::cout << std::endl;
 
-	// print result
+	// Print result of each Item
 	for (int i = 0; i < (int)ItemID::Count; i++)
 	{
 		std::cout << char( i + 'A' ) << "-Item\nÈ¹µæ °³¼ö: " << resultList[i].GetCount() << "\nÈ¹µæ À§Ä¡: \n";
@@ -380,5 +294,4 @@ void Chapter9::Question4()
 		}
 		std::cout <<"\n" << std::endl;
 	}
-
 }

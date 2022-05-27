@@ -277,14 +277,9 @@ public:
 		return id;
 	}
 
-	ItemID GetRandomItem( int randNum )
+	bool CheckItemIsNoData( int pos ) const
 	{
-		ItemID id = ItemID::NoData;
-		while ( itemDistributionList[randNum] != ItemID::NoData )
-		{
-			id = GetItem( randNum );
-		}
-		return id;
+		return itemDistributionList[pos] == ItemID::NoData;
 	}
 
 private:
@@ -314,24 +309,105 @@ void Chapter9::Question4()
 
 	std::random_device rd;
 	std::mt19937 rng( rd() );
-	std::uniform_int_distribution<int> itemRand( 0, itemCnt );
+	std::uniform_int_distribution<int> itemRand( 0, itemCnt - 1 );
 
 	std::vector<ItemID> acquisitionList;
 	acquisitionList.reserve( itemCnt );
 
 	// for loop as cnt
-	for ( int i = 1; i <= cnt; i++ )
+	for ( int i = 1; i <= cnt; )
 	{
-		int randNum = itemRand( rng );
-		
-		const ItemID curId = itemTable.GetRandomItem( randNum );
-		std::cout << i << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
-
 		// Reset Table
-		if ( i % 100 == 0 )
+		if (i % 100 == 0)
 		{
 			itemTable = originItemTable;
 		}
+
+		// Get Random Number
+		int randNum = itemRand( rng );
+		// If No Data at random	pos, continue and get new random value
+		if (itemTable.CheckItemIsNoData(randNum))
+		{
+			continue;
+		}
+
+		// Get Data from randomNum
+		const ItemID curId = itemTable.GetItem( randNum );
+		acquisitionList.push_back( curId );
+
+		std::cout << i << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
+
+		i++;
 	}
+
+	struct ResultTable
+	{
+		ResultTable(size_t count, size_t pos)
+			:
+			count(count),
+			pos(pos)
+		{}
+
+		size_t count = 0;
+		size_t pos = 0;
+	};
+
+	std::vector<std::vector<ResultTable>> resultList( (int)ItemID::Count );
+
+	std::vector<ResultTable> resultA;
+	std::vector<ResultTable> resultB;
+	std::vector<ResultTable> resultC;
+	std::vector<ResultTable> resultD;
+	std::vector<ResultTable> resultE;
+	std::vector<ResultTable> resultF;
+	std::vector<ResultTable> resultG;
+	std::vector<ResultTable> resultH;
+	std::vector<ResultTable> resultI;
+	std::vector<ResultTable> resultJ;
+	std::vector<ResultTable> resultK;
+
+	// Set Count of Result
+	for (size_t i = 0; i < acquisitionList.size(); i++)
+	{
+		switch (acquisitionList[i])
+		{
+		case ItemID::A:
+			resultA.emplace_back( acquisitionList[i], i  );
+			break;
+		case ItemID::B:
+			resultB.emplace_back( acquisitionList[i], i );
+			break;
+		case ItemID::C:
+			resultC.emplace_back( acquisitionList[i], i );
+			break;
+		case ItemID::D:
+			resultD.emplace_back( acquisitionList[i], i );
+			break;
+		case ItemID::E:
+			resultE.emplace_back( acquisitionList[i], i );
+			break;
+		case ItemID::F:
+			resultF.emplace_back( acquisitionList[i], i );
+			break;
+		case ItemID::G:
+			resultG.emplace_back( acquisitionList[i], i );
+			break;
+		case ItemID::H:
+			resultH.emplace_back( acquisitionList[i], i );
+			break;
+		case ItemID::I:
+			resultI.emplace_back( acquisitionList[i], i );
+			break;
+		case ItemID::J:
+			resultJ.emplace_back( acquisitionList[i], i );
+			break;
+		case ItemID::K:
+			resultK.emplace_back( acquisitionList[i], i );
+			break;
+		}
+	}
+
+	// print result
+	printf( "Item A : %d°³, À§Ä¡:", resultA.size() );
 
 }

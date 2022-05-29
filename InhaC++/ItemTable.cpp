@@ -19,7 +19,7 @@ int ItemTable::ItemInfo::GetPercentage() const
 ItemTable::ItemTable( const std::vector<ItemInfo>& itemInfos, int tableSize = 10 )
 {
 	// Reserve itemDistributionList
-	itemDistributionList.reserve( 100 );
+	itemDistributionList.reserve( tableSize );
 
 	// Set itemDistributionList by percentage of itemList
 	for (auto e : itemInfos)

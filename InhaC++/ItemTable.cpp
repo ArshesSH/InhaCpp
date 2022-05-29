@@ -3,7 +3,8 @@
 ItemTable::ItemInfo::ItemInfo( ItemID id, int percentage )
 	:
 	id( id ),
-	percentage( percentage )
+	percentage( percentage ),
+	count( percentage )
 {}
 
 ItemID ItemTable::ItemInfo::GetID() const
@@ -16,35 +17,76 @@ int ItemTable::ItemInfo::GetPercentage() const
 	return percentage;
 }
 
-ItemTable::ItemTable( const std::vector<ItemInfo>& itemInfos, int tableSize = 10 )
+int ItemTable::ItemInfo::GetRemainCount() const
 {
-	// Reserve itemDistributionList
-	itemDistributionList.reserve( tableSize );
-
-	// Set itemDistributionList by percentage of itemList
-	for (auto e : itemInfos)
-	{
-		for (int i = 0; i < e.GetPercentage(); i++)
-		{
-			itemDistributionList.push_back( e.GetID() );
-		}
-	}
+	return count;
 }
 
-ItemID ItemTable::GetItem( int pos )
+void ItemTable::ItemInfo::ResetCount()
 {
-	// Return id and set to NoData
-	const ItemID id = itemDistributionList[pos];
-	itemDistributionList[pos] = ItemID::NoData;
-	return id;
+	count = percentage;
+}
+
+void ItemTable::ItemInfo::ReduceCount()
+{
+	--count;
+}
+
+bool ItemTable::ItemInfo::IsCountZero() const
+{
+	return count == 0;
+}
+
+
+ItemTable::ItemTable( const std::vector<ItemInfo>& itemInfos )
+	:
+	itemInfoList(itemInfos)
+{
+	for (const auto info : itemInfoList)
+	{
+		totalItemCount += info.GetPercentage();
+	}
 }
 
 size_t ItemTable::GetSize() const
 {
-	return itemDistributionList.size();
+	return itemInfoList.size();
 }
 
-bool ItemTable::CheckItemIsNoData( int pos ) const
+size_t ItemTable::GetTotalItemCount() const
 {
-	return itemDistributionList[pos] == ItemID::NoData;
+	return totalItemCount;
+}
+
+bool ItemTable::IsItemCountZero( int pos ) const
+{
+	return itemInfoList[pos].IsCountZero();
+}
+
+bool ItemTable::IsItemTableEmpty() const
+{
+	for (const auto info : itemInfoList)
+	{
+		if (!info.IsCountZero())
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+ItemID ItemTable::GetItem( int pos )
+{
+	// Return id and reduce conut
+	const ItemID id = itemInfoList[pos].GetID();
+	itemInfoList[pos].ReduceCount();
+	return id;
+}
+
+void ItemTable::ResetItemTable()
+{
+	for (auto& info : itemInfoList)
+	{
+		info.ResetCount();
+	}
 }

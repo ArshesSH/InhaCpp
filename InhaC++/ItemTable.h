@@ -31,21 +31,29 @@ public:
 	
 		ItemID GetID() const;
 		int GetPercentage() const;
+		int GetRemainCount() const;
+		void ResetCount();
+		void ReduceCount();
+		bool IsCountZero() const;
+
 	private:
 		ItemID id;
-		int percentage;
+		const int percentage;
+		int count;
 	};
 
 
 public:
-	ItemTable( const std::vector<ItemInfo>& itemInfos, int tableSize );
-
-	ItemID GetItem( int pos );
+	ItemTable( const std::vector<ItemInfo>& itemInfos );
 
 	size_t GetSize() const;
-
-	bool CheckItemIsNoData( int pos ) const;
+	size_t GetTotalItemCount() const;
+	bool IsItemCountZero( int pos ) const;
+	bool IsItemTableEmpty() const;
+	ItemID GetItem( int pos );
+	void ResetItemTable();
 
 private:
-	std::vector<ItemID> itemDistributionList;
+	std::vector<ItemInfo> itemInfoList;
+	size_t totalItemCount = 0;
 };

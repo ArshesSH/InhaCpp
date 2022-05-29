@@ -231,12 +231,8 @@ void Chapter9::Question4()
 		ItemTable::ItemInfo( ItemID::H, 10 ),ItemTable::ItemInfo( ItemID::I, 10 ),ItemTable::ItemInfo( ItemID::J, 10 ),ItemTable::ItemInfo( ItemID::K, 38 )
 	};
 
-	// Size of Item Max Probability, You can skip this but it used for reserve vector
-	const int itemSize = 100;
-
 	// Create ItemTable
-	const ItemTable originItemTable( itemInfos, itemSize );
-	ItemTable itemTable( itemInfos, itemSize );
+	ItemTable itemTable( itemInfos );
 
 	// Set MaxCnt
 	std::cout << "¾ÆÀÌÅÛ È®·ü »Ì±â\n";
@@ -248,6 +244,7 @@ void Chapter9::Question4()
 	std::random_device rd;
 	std::mt19937 rng( rd() );
 	std::uniform_int_distribution<int> itemRand( 0, (int)itemTable.GetSize() - 1 );
+	std::normal_distribution<float> itemNormalRand( (float)((int)ItemID::Count - 1), 2 );
 
 	/*
 	* Create ResultTable List
@@ -259,24 +256,39 @@ void Chapter9::Question4()
 	for ( int tryCnt = 1; tryCnt <= maxCnt; )
 	{
 		// Get Random Number
-		int randNum = itemRand( rng );
+		//int randPos = itemRand( rng );
+		
+		int randPos = (int)(itemNormalRand( rng ));
+		const int oldRand = randPos;
+
+		if (randPos >= 22)
+		{
+			int a = 9;
+		}
+
+		if (randPos > (int)ItemID::Count - 1)
+		{
+			randPos -= (randPos - ((int)ItemID::Count - 1)) * 2 - 1;
+		}
+
+
 		// If No Data at random	pos, continue and get new random value
-		if (itemTable.CheckItemIsNoData(randNum))
+		if (itemTable.IsItemCountZero( randPos ))
 		{
 			continue;
 		}
 
 		// Get Data from randomNum
-		const ItemID curId = itemTable.GetItem( randNum );
+		const ItemID curId = itemTable.GetItem( randPos );
 		resultList[(int)curId].PushPos( tryCnt );
 
 		// Log data
 		std::cout << tryCnt << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
 
 		// Reset ItemTable
-		if (tryCnt % itemTable.GetSize() == 0)
+		if (tryCnt % itemTable.GetTotalItemCount() == 0)
 		{
-			itemTable = originItemTable;
+			itemTable.ResetItemTable();
 		}
 
 		tryCnt++;

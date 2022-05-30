@@ -240,11 +240,16 @@ void Chapter9::Question4()
 	int maxCnt;
 	std::cin >> maxCnt;
 
-	// Create Random Engine (0 ~ ItemSize - 1)
+	// Create Random Engine
 	std::random_device rd;
 	std::mt19937 rng( rd() );
-	std::uniform_int_distribution<int> itemRand( 0, (int)itemTable.GetSize() - 1 );
-	std::normal_distribution<float> itemNormalRand( (float)((int)ItemID::Count - 1), 2 );
+	std::vector<unsigned int> itemProbabilities;
+	itemProbabilities.reserve( (int)ItemID::Count );
+	for (const auto e : itemInfos)
+	{
+		itemProbabilities.push_back( e.GetPercentage() );
+	}
+	std::discrete_distribution<unsigned int> itemDist( itemProbabilities.cbegin(), itemProbabilities.cend() );
 
 	/*
 	* Create ResultTable List
@@ -256,21 +261,7 @@ void Chapter9::Question4()
 	for ( int tryCnt = 1; tryCnt <= maxCnt; )
 	{
 		// Get Random Number
-		//int randPos = itemRand( rng );
-		
-		int randPos = (int)(itemNormalRand( rng ));
-		const int oldRand = randPos;
-
-		if (randPos >= 22)
-		{
-			int a = 9;
-		}
-
-		if (randPos > (int)ItemID::Count - 1)
-		{
-			randPos -= (randPos - ((int)ItemID::Count - 1)) * 2 - 1;
-		}
-
+		int randPos = itemDist( rng );
 
 		// If No Data at random	pos, continue and get new random value
 		if (itemTable.IsItemCountZero( randPos ))

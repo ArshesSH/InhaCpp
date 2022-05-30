@@ -8,6 +8,7 @@
 #include <string>
 #include "ItemTable.h"
 #include "ItemResultTable.h"
+#include "Timer.h"
 
 /*
 * Q1.
@@ -225,6 +226,7 @@ void Chapter9::Question3()
 
 void Chapter9::Question4()
 {
+	Timer timer;
 	// Create ItemList
 	const std::vector<ItemTable::ItemInfo> itemInfos = { ItemTable::ItemInfo( ItemID::A, 1 ), ItemTable::ItemInfo( ItemID::B, 3 ), ItemTable::ItemInfo( ItemID::C, 3 ),
 		ItemTable::ItemInfo( ItemID::D, 5 ),ItemTable::ItemInfo( ItemID::E, 5 ),ItemTable::ItemInfo( ItemID::F, 5 ),ItemTable::ItemInfo( ItemID::G, 10 ),
@@ -271,7 +273,7 @@ void Chapter9::Question4()
 		resultList[(int)curId].PushPos( tryCnt );
 
 		// Log data
-		std::cout << tryCnt << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
+		//std::cout << tryCnt << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
 
 		// Reset ItemTable
 		if (tryCnt % itemTable.GetSize() == 0)
@@ -281,7 +283,7 @@ void Chapter9::Question4()
 
 		tryCnt++;
 	}
-
+	float finishTimer = timer.GetTime();
 	std::cout << std::endl;
 
 	// Print result of each Item
@@ -293,5 +295,6 @@ void Chapter9::Question4()
 			std::cout << e << " ";
 		}
 		std::cout <<"\n" << std::endl;
+		std::cout << "°É¸° ½Ã°£ : " << finishTimer << std::endl;
 	}
 }

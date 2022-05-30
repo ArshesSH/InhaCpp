@@ -226,7 +226,6 @@ void Chapter9::Question3()
 
 void Chapter9::Question4()
 {
-	Timer timer;
 	// Create ItemList
 	const std::vector<ItemTable::ItemInfo> itemInfos = { ItemTable::ItemInfo( ItemID::A, 1 ), ItemTable::ItemInfo( ItemID::B, 3 ), ItemTable::ItemInfo( ItemID::C, 3 ),
 		ItemTable::ItemInfo( ItemID::D, 5 ),ItemTable::ItemInfo( ItemID::E, 5 ),ItemTable::ItemInfo( ItemID::F, 5 ),ItemTable::ItemInfo( ItemID::G, 10 ),
@@ -246,6 +245,9 @@ void Chapter9::Question4()
 	int maxCnt;
 	std::cin >> maxCnt;
 
+	// Timer for Check Performance
+	Timer timer;
+
 	// Create Random Engine (0 ~ ItemSize - 1)
 	std::random_device rd;
 	std::mt19937 rng( rd() );
@@ -262,6 +264,7 @@ void Chapter9::Question4()
 	{
 		// Get Random Number
 		int randNum = itemRand( rng );
+
 		// If No Data at random	pos, continue and get new random value
 		if (itemTable.CheckItemIsNoData(randNum))
 		{
@@ -273,7 +276,7 @@ void Chapter9::Question4()
 		resultList[(int)curId].PushPos( tryCnt );
 
 		// Log data
-		//std::cout << tryCnt << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
+		std::cout << tryCnt << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
 
 		// Reset ItemTable
 		if (tryCnt % itemTable.GetSize() == 0)
@@ -283,6 +286,8 @@ void Chapter9::Question4()
 
 		tryCnt++;
 	}
+	
+	// Get Time
 	float finishTimer = timer.GetTime();
 	std::cout << std::endl;
 
@@ -295,6 +300,6 @@ void Chapter9::Question4()
 			std::cout << e << " ";
 		}
 		std::cout <<"\n" << std::endl;
-		std::cout << "°É¸° ½Ã°£ : " << finishTimer << std::endl;
 	}
+	std::cout << "°É¸° ½Ã°£ : " << finishTimer << std::endl;
 }

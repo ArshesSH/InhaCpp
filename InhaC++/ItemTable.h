@@ -28,7 +28,6 @@ public:
 	{
 	public:
 		ItemInfo( ItemID id, int percentage );
-	
 		ItemID GetID() const;
 		int GetPercentage() const;
 	private:
@@ -36,16 +35,11 @@ public:
 		int percentage;
 	};
 
-
 public:
 	ItemTable( const std::vector<ItemInfo>& itemInfos, int tableSize );
-
 	ItemID GetItem( int pos );
-
 	size_t GetSize() const;
-
 	bool CheckItemIsNoData( int pos ) const;
-
 private:
 	std::vector<ItemID> itemDistributionList;
 };

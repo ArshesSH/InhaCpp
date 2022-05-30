@@ -8,6 +8,7 @@
 #include <string>
 #include "ItemTable.h"
 #include "ItemResultTable.h"
+#include "Timer.h"
 
 /*
 * Q1.
@@ -240,6 +241,8 @@ void Chapter9::Question4()
 	int maxCnt;
 	std::cin >> maxCnt;
 
+
+	Timer timer;
 	// Create Random Engine
 	std::random_device rd;
 	std::mt19937 rng( rd() );
@@ -274,7 +277,7 @@ void Chapter9::Question4()
 		resultList[(int)curId].PushPos( tryCnt );
 
 		// Log data
-		std::cout << tryCnt << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
+		//std::cout << tryCnt << "¹øÂ° È¹µæ °ª : " << (int)curId << std::endl;
 
 		// Reset ItemTable
 		if (tryCnt % itemTable.GetTotalItemCount() == 0)
@@ -284,9 +287,10 @@ void Chapter9::Question4()
 
 		tryCnt++;
 	}
-
+	float finishTimer = timer.GetTime();
 	std::cout << std::endl;
 
+	/*
 	// Print result of each Item
 	for (int i = 0; i < (int)ItemID::Count; i++)
 	{
@@ -297,4 +301,6 @@ void Chapter9::Question4()
 		}
 		std::cout <<"\n" << std::endl;
 	}
+	*/
+	std::cout << "°É¸° ½Ã°£ : " << finishTimer << std::endl;
 }

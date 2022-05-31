@@ -1,13 +1,15 @@
 #pragma once
 
+#include "Vec2.h"
+
 template <typename T>
-class Vec3 : public _Vec2<T>
+class Vec3 : public Vec2<T>
 {
 public:
-	Vec3() {}
+	Vec3() { z = 0; }
 	Vec3( T x, T y, T z )
 		:
-		_Vec2( x, y ),
+		Vec2<T>( x, y ),
 		z( z )
 	{}
 	Vec3( const Vec3& vect )
@@ -17,22 +19,22 @@ public:
 	template <typename T2>
 	explicit operator Vec3<T2>() const
 	{
-		return{ (T2)x,(T2)y,(T2)z };
+		return{ (T2)this->x,(T2)this->y,(T2)this->z };
 	}
 	T		LenSq() const
 	{
-		return sq( *this );
+		return this->x* this->x + this->y* this->y + this->z* this->z;
 	}
 	T		Len() const
 	{
-		return sqrt( LenSq() );
+		return std::sqrt( LenSq() );
 	}
 	Vec3& Normalize()
 	{
 		const T length = Len();
-		x /= length;
-		y /= length;
-		z /= length;
+		this->x /= length;
+		this->y /= length;
+		this->z /= length;
 		return *this;
 	}
 	Vec3	GetNormalized() const
@@ -43,32 +45,32 @@ public:
 	}
 	Vec3	operator-() const
 	{
-		return Vec3( -x, -y, -z );
+		return Vec3( -this->x, -this->y, -this->z );
 	}
 	Vec3& operator=( const Vec3& rhs )
 	{
-		x = rhs.x;
-		y = rhs.y;
-		z = rhs.z;
+		this->x = rhs.x;
+		this->y = rhs.y;
+		this->z = rhs.z;
 		return *this;
 	}
 	Vec3& operator+=( const Vec3& rhs )
 	{
-		x += rhs.x;
-		y += rhs.y;
-		z += rhs.z;
+		this->x += rhs.x;
+		this->y += rhs.y;
+		this->z += rhs.z;
 		return *this;
 	}
 	Vec3& operator-=( const Vec3& rhs )
 	{
-		x -= rhs.x;
-		y -= rhs.y;
-		z -= rhs.z;
+		this->x -= rhs.x;
+		this->y -= rhs.y;
+		this->z -= rhs.z;
 		return *this;
 	}
 	T		operator*( const Vec3& rhs ) const
 	{
-		return x * rhs.x + y * rhs.y + z * rhs.z;
+		return this->x * rhs.x + this->y * rhs.y + this->z * rhs.z;
 	}
 	Vec3	operator+( const Vec3& rhs ) const
 	{
@@ -80,9 +82,9 @@ public:
 	}
 	Vec3& operator*=( const T& rhs )
 	{
-		x *= rhs;
-		y *= rhs;
-		z *= rhs;
+		this->x *= rhs;
+		this->y *= rhs;
+		this->z *= rhs;
 		return *this;
 	}
 	Vec3	operator*( const T& rhs ) const
@@ -91,9 +93,9 @@ public:
 	}
 	Vec3& operator/=( const T& rhs )
 	{
-		x /= rhs;
-		y /= rhs;
-		z /= rhs;
+		this->x /= rhs;
+		this->y /= rhs;
+		this->z /= rhs;
 		return *this;
 	}
 	Vec3	operator/( const T& rhs ) const
@@ -102,7 +104,7 @@ public:
 	}
 	bool	operator==( const Vec3& rhs ) const
 	{
-		return x == rhs.x && y == rhs.y && rhs.z = z;
+		return this->x == rhs.x && this->y == rhs.y && rhs.z = this->z;
 	}
 	bool	operator!=( const Vec3& rhs ) const
 	{

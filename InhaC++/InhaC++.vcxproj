@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Chapter10.cpp" />
     <ClCompile Include="Chapter2n3.cpp" />
     <ClCompile Include="Chapter4.cpp" />
     <ClCompile Include="Chapter5n6.cpp" />
@@ -149,8 +150,10 @@
     <ClCompile Include="ItemResultTable.cpp" />
     <ClCompile Include="ItemTable.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="stock00.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Chapter10.h" />
     <ClInclude Include="Chapter2n3.h" />
     <ClInclude Include="Chapter4.h" />
     <ClInclude Include="Chapter5n6.h" />
@@ -161,6 +164,7 @@
     <ClInclude Include="ItemResultTable.h" />
     <ClInclude Include="ItemTable.h" />
     <ClInclude Include="Rect.h" />
+    <ClInclude Include="stock00.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />

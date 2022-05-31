@@ -6,7 +6,7 @@ template<typename T>
 class Vec2
 {
 public:
-	Vec2() = default;
+	Vec2() { x = 0, y = 0; }
 	Vec2( T x_in, T y_in )
 		:
 		x( x_in ),
@@ -40,6 +40,11 @@ public:
 	Vec2& operator*=( T rhs )
 	{
 		return *this = *this * rhs;
+	}
+
+	T operator*( Vec2<T> rhs ) const
+	{
+		return T( x * rhs.x + y * rhs.y );
 	}
 
 	Vec2 operator-( const Vec2& rhs ) const
@@ -83,6 +88,10 @@ public:
 			return *this * ((T)1 / len);
 		}
 		return *this;
+	}
+	static T GetCrossProduct( const Vec2& lhs, const Vec2& rhs )
+	{
+		return T(lhs.x * rhs.y - lhs.y * rhs.x);
 	}
 
 public:

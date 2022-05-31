@@ -1,12 +1,11 @@
 #include <iostream>
-#include "Chapter9.h"
-#include "Timer.h"
+#include "Chapter10.h"
 
 int main()
 {
-	while (true)
+	while ( true )
 	{
-		Chapter9::Question4();
+		Chapter10::Question3();
 	}
 
 	return 0;

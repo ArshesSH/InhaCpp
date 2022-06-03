@@ -8,6 +8,7 @@
 #include "Vec2.h"
 #include "Vec3.h"
 #include "stock00.h"
+#include "Account.h"
 
 /*
 * Q1
@@ -322,6 +323,139 @@ void Chapter10::Hangman()
 				isGameFinished = true;
 				inputFlag = false;
 				break;
+			}
+		}
+	}
+}
+
+
+// p705 연습문제1, 계좌정보를 출력하는 Account.h, Account.cpp, UseAccnt.cpp 만들기
+
+size_t FindAccountPos( const std::vector<Account>& accounts, const std::string& number )
+{
+	size_t i;
+	for ( i = 0; i < accounts.size(); ++i )
+	{
+		if ( accounts[i].IsSameNumber( number ) )
+		{
+			return i;
+		}
+	}
+	return i;
+}
+
+void Chapter10::UseAccnt()
+{
+	enum class Menu
+	{
+		Exit,
+		Create,
+		Deposit,
+		Withdraw,
+		PrintAccount,
+		PrintAll
+	};
+	std::cout << "Account 동작 테스트\n";
+
+	std::vector<Account> accounts;
+	while ( true )
+	{
+		int menu;
+		std::cout << "0: 종료, 1: 계좌 생성, 2: 입금, 3: 출금, 4: 계좌 출력, 5: 전체 계좌 정보 출력\n메뉴 입력 : ";
+		std::cin >> menu;
+
+		if ( menu == (int)Menu::Exit )
+		{
+			break;
+		}
+		else if ( menu == (int)Menu::Create )
+		{
+			std::string accountName;
+			std::string accountNum;
+			std::cout << "예금주 명 : ";
+			std::cin >> accountName;
+			std::cout << "계좌 번호 : ";
+			std::cin >> accountNum;
+
+			const size_t accountPos = FindAccountPos( accounts, accountNum );
+			if ( accountPos == accounts.size() )
+			{
+				accounts.emplace_back( accountName, accountNum );
+				std::cout << "계좌 생성 완료\n\n";
+			}
+			else
+			{
+				std::cout << "중복된 계좌가 존재합니다.\n\n";
+			}
+		}
+		else if ( menu == (int)Menu::Deposit )
+		{
+			std::string accountNum;
+			int ammount;
+			std::cout << "입금할 계좌 번호 입력 : ";
+			std::cin >> accountNum;
+			std::cout << "입금할 금액 입력 : ";
+			std::cin >> ammount;
+
+			const size_t accountPos = FindAccountPos( accounts, accountNum );
+			if ( accountPos != accounts.size() )
+			{
+				accounts[accountPos].Deposit( ammount );
+				std::cout << "입금이 완료되었습니다.\n\n";
+			}
+			else
+			{
+				std::cout << "계좌가 존재하지 않습니다. \n\n";
+			}
+		}
+		else if ( menu == (int)Menu::Withdraw )
+		{
+			std::string accountNum;
+			int ammount;
+			std::cout << "출금할 계좌 번호 입력 : ";
+			std::cin >> accountNum;
+			std::cout << "출금할 금액 입력 : ";
+			std::cin >> ammount;
+
+			const size_t accountPos = FindAccountPos( accounts, accountNum );
+			if ( accountPos != accounts.size() )
+			{
+				if ( accounts[accountPos].CheckWithdraw( ammount ) )
+				{
+					accounts[accountPos].DoWithdraw();
+					std::cout << "출금이 완료되었습니다. 남은 잔액 : " << accounts[accountPos].GetBalance() << "\n\n";
+				}
+				else
+				{
+					std::cout << "남은 잔액이 " << accounts[accountPos].GetBalance() << "이므로, 출금할 수 없습니다.\n\n";
+				}
+			}
+			else
+			{
+				std::cout << "계좌가 존재하지 않습니다. \n\n";
+			}
+		}
+		else if ( menu == (int)Menu::PrintAccount )
+		{
+			std::string accountNum;
+			std::cout << "출력할 계좌 번호 입력 : ";
+			std::cin >> accountNum;
+
+			const size_t accountPos = FindAccountPos( accounts, accountNum );
+			if ( accountPos != accounts.size() )
+			{
+				accounts[accountPos].Print();
+			}
+			else
+			{
+				std::cout << "계좌가 존재하지 않습니다. \n\n";
+			}
+		}
+		else if ( menu == (int)Menu::PrintAll )
+		{
+			for ( const auto e : accounts )
+			{
+				e.Print();
 			}
 		}
 	}

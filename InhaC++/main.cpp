@@ -3,7 +3,7 @@
 
 int main()
 {
-	Chapter10::Hangman();
+	Chapter10::UseAccnt();
 
 	return 0;
 }

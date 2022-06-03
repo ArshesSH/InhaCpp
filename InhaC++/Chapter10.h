@@ -8,6 +8,7 @@ public:
 	static void LearnClass();
 	static void Question3();
 	static void Hangman();
+	static void UseAccnt();
 private:
 	
 };

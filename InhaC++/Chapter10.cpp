@@ -1,6 +1,10 @@
 #include "Chapter10.h"
 
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <random>
 #include "Vec2.h"
 #include "Vec3.h"
 #include "stock00.h"
@@ -176,5 +180,149 @@ void Chapter10::Question3()
 	{
 		std::cout << "삼각형이 아닙니다!!!\n" << std::endl;
 	}
+}
 
+/*
+* 임의의 한 단어를 생성하고 사용자가 한 번에 한 문자만을 추측하도록 해서 단어를 맞추는 게임 (행맨)
+* 단어의 각 문자 '*'로 표시
+* 사용자가 올바른 추측하면 실제 문자 화면에 표시
+* 사용자가 단어 맞추기를 끝냈을 경우 실수한 횟수 표시, 다른 단어로 계속할 것인지 묻기
+* ex>생성된 단어 : apple
+* 단어중 한 글자를 입력하시오 : ***** > a
+*							  a****
+* 단어중 한 글자를 입력하시오 : a**** > r
+* r은 단어에 포함되지 않습니다.
+* 단어중 한 글자를 입력하시오 : ***** > a
+* a는 이미 단어에 포함되어 있습니다.
+* 단어중 한 글자를 입력하시오 : app*e > l
+* 총 x번 실패 x번 만에 정답!
+*/
+
+void GetCharPosList( char c, const std::string& str, std::vector<size_t>& posList )
+{
+	for ( auto i = 0; i < str.size(); ++i )
+	{
+		if ( str[i] == c )
+		{
+			posList.push_back( i );
+		}
+	}
+}
+
+bool IsCharInStr( char c, const std::string& str )
+{
+	if ( str.find( c ) != std::string::npos )
+	{
+		return true;
+	}
+	return false;
+}
+
+void Chapter10::Hangman()
+{
+	// Generate words
+	std::vector<std::string> words;
+	std::ifstream in( "5words.txt" );
+	for ( std::string str; std::getline( in, str ); )
+	{
+		if ( str.empty() )
+		{
+			continue;
+		}
+		words.push_back( str );
+	}
+	in.close();
+
+	// Set Init variables
+	int correctCnt = 0;
+	int wrongCnt = 0;
+
+	// Loop Game
+	bool isGameFinished = false;
+	while ( !isGameFinished )
+	{
+		// Pick word from random words
+		std::random_device rd;
+		std::mt19937 rng( rd() );
+		std::uniform_int_distribution<> wordDist( 0, words.size() - 1 );
+		const std::string targetWord = words[wordDist( rng )];
+
+		// Generate answerStr
+		std::string answerStr;
+		for ( const auto c : targetWord )
+		{
+			answerStr.push_back( '*' );
+		}
+
+		// Loop Stage
+		bool isStageFinished = false;
+		while ( !isStageFinished )
+		{
+			// Print current state
+			std::cout << "단어 중 한 글자를 입력하시오. " << answerStr << " > ";
+			
+			// Get Player Input char
+			char playerInput;
+			std::cin >> playerInput;
+			playerInput = (char)tolower( playerInput );
+
+			// Get Character Pos List
+			std::vector<size_t> posList;
+			GetCharPosList( playerInput, targetWord, posList );
+
+			// If playerInput in target word
+			if ( !posList.empty() )
+			{
+				// If playerInput not in answerStr
+				if ( !IsCharInStr( playerInput, answerStr ) )
+				{
+					// Change answerStr
+					for ( const auto e : posList )
+					{
+						answerStr[e] = playerInput;
+					}
+					++correctCnt;
+					std::cout << "\t\t\t\t" << answerStr << std::endl;
+
+					// If Find Answer, Finish stage
+					if ( answerStr == targetWord )
+					{
+						std::cout << "총 " << wrongCnt << "번 실패, " << correctCnt << "번 만에 정답!\n\n";
+						isStageFinished = true;
+					}
+				}
+				else
+				{
+					std::cout << playerInput << "은(는) 이미 있습니다.\n\n";
+				}
+			}
+			else
+			{
+				std::cout << playerInput << "은(는) 단어에 포함되지 않습니다.\n\n";
+				++wrongCnt;
+			}
+		}
+
+		// Continue
+		bool inputFlag = true;
+		while ( inputFlag )
+		{
+			char c;
+			std::cout << "계속 하시겠습니까? (Y or N) : ";
+			std::cin >> c;
+			switch ( c )
+			{
+			case 'y':
+			case 'Y':
+				inputFlag = false;
+				break;
+
+			case 'n':
+			case 'N':
+				isGameFinished = true;
+				inputFlag = false;
+				break;
+			}
+		}
+	}
 }

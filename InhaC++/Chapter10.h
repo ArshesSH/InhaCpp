@@ -7,6 +7,7 @@ public:
 	static void Question2();
 	static void LearnClass();
 	static void Question3();
+	static void Hangman();
 private:
 	
 };

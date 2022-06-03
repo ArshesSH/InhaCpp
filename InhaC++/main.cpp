@@ -3,10 +3,7 @@
 
 int main()
 {
-	while ( true )
-	{
-		Chapter10::Question3();
-	}
+	Chapter10::Hangman();
 
 	return 0;
 }

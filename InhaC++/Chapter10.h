@@ -10,5 +10,4 @@ public:
 	static void Hangman();
 	static void UseAccnt();
 private:
-	
 };

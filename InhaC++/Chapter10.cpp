@@ -391,48 +391,62 @@ void Chapter10::UseAccnt()
 		else if ( menu == (int)Menu::Deposit )
 		{
 			std::string accountNum;
-			int ammount;
+			long long int ammount;
 			std::cout << "입금할 계좌 번호 입력 : ";
 			std::cin >> accountNum;
 			std::cout << "입금할 금액 입력 : ";
 			std::cin >> ammount;
 
 			const size_t accountPos = FindAccountPos( accounts, accountNum );
-			if ( accountPos != accounts.size() )
+			if ( accounts[accountPos].CheckInputAmount( ammount ) )
 			{
-				accounts[accountPos].Deposit( ammount );
-				std::cout << "입금이 완료되었습니다.\n\n";
+				if ( accountPos != accounts.size() )
+				{
+					accounts[accountPos].DoDeposit( ammount );
+					std::cout << "입금이 완료되었습니다.\n\n";
+				}
+				else
+				{
+					std::cout << "계좌가 존재하지 않습니다. \n\n";
+				}
 			}
 			else
 			{
-				std::cout << "계좌가 존재하지 않습니다. \n\n";
+				std::cout << "입력을 다시 해주세요\n\n";
 			}
 		}
 		else if ( menu == (int)Menu::Withdraw )
 		{
 			std::string accountNum;
-			int ammount;
+			long long int ammount;
 			std::cout << "출금할 계좌 번호 입력 : ";
 			std::cin >> accountNum;
 			std::cout << "출금할 금액 입력 : ";
 			std::cin >> ammount;
 
 			const size_t accountPos = FindAccountPos( accounts, accountNum );
-			if ( accountPos != accounts.size() )
+			if ( accounts[accountPos].CheckInputAmount( ammount ) )
 			{
-				if ( accounts[accountPos].CheckWithdraw( ammount ) )
+				if ( accountPos != accounts.size() )
 				{
-					accounts[accountPos].DoWithdraw();
-					std::cout << "출금이 완료되었습니다. 남은 잔액 : " << accounts[accountPos].GetBalance() << "\n\n";
+					if ( accounts[accountPos].CheckWithdraw( ammount ) )
+					{
+						accounts[accountPos].DoWithdraw();
+						std::cout << "출금이 완료되었습니다. 남은 잔액 : " << accounts[accountPos].GetBalance() << "\n\n";
+					}
+					else
+					{
+						std::cout << "남은 잔액이 " << accounts[accountPos].GetBalance() << "이므로, 출금할 수 없습니다.\n\n";
+					}
 				}
 				else
 				{
-					std::cout << "남은 잔액이 " << accounts[accountPos].GetBalance() << "이므로, 출금할 수 없습니다.\n\n";
+					std::cout << "계좌가 존재하지 않습니다. \n\n";
 				}
 			}
 			else
 			{
-				std::cout << "계좌가 존재하지 않습니다. \n\n";
+				std::cout << "입력을 다시 해주세요\n\n";
 			}
 		}
 		else if ( menu == (int)Menu::PrintAccount )

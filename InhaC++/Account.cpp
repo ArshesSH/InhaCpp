@@ -1,6 +1,7 @@
 #include "Account.h"
 
 #include <iostream>
+#include <limits>
 
 Account::Account( const std::string& name, const std::string& number)
 	:
@@ -16,7 +17,7 @@ void Account::Print() const
 		<< "\nÀÜ¾× : " << balance << "\n" << std::endl;
 }
 
-void Account::Deposit( int amount )
+void Account::DoDeposit( int amount )
 {
 	balance += amount;
 }
@@ -26,7 +27,17 @@ void Account::DoWithdraw()
 	balance = nextBalance;
 }
 
-bool Account::CheckWithdraw( int amount )
+bool Account::CheckInputAmount( int amount )
+{
+	if ( amount <= 0 || amount + balance >= LLONG_MAX )
+	{
+		return false;
+	}
+	return true;
+}
+
+bool Account::CheckWithdraw( int amount ) 
+
 {
 	nextBalance = balance;
 	nextBalance -= amount;
@@ -34,10 +45,7 @@ bool Account::CheckWithdraw( int amount )
 	{
 		return true;
 	}
-	else
-	{
-		return false;
-	}
+	return false;
 }
 
 bool Account::IsSameNumber( const std::string& n ) const
@@ -45,7 +53,7 @@ bool Account::IsSameNumber( const std::string& n ) const
 	return number == n;
 }
 
-int Account::GetBalance() const
+long long int Account::GetBalance() const
 {
 	return balance;
 }

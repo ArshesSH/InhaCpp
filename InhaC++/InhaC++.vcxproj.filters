@@ -51,6 +51,12 @@
     <ClCompile Include="Account.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Chapter11.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ExTime.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chapter2n3.h">
@@ -99,6 +105,18 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Account.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Chapter11.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ExTime.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="cVec3.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MathSH.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

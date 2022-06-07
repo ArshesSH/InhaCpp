@@ -142,12 +142,14 @@
   <ItemGroup>
     <ClCompile Include="Account.cpp" />
     <ClCompile Include="Chapter10.cpp" />
+    <ClCompile Include="Chapter11.cpp" />
     <ClCompile Include="Chapter2n3.cpp" />
     <ClCompile Include="Chapter4.cpp" />
     <ClCompile Include="Chapter5n6.cpp" />
     <ClCompile Include="Chapter7.cpp" />
     <ClCompile Include="Chapter8.cpp" />
     <ClCompile Include="Chapter9.cpp" />
+    <ClCompile Include="ExTime.cpp" />
     <ClCompile Include="ItemResultTable.cpp" />
     <ClCompile Include="ItemTable.cpp" />
     <ClCompile Include="main.cpp" />
@@ -156,6 +158,7 @@
   <ItemGroup>
     <ClInclude Include="Account.h" />
     <ClInclude Include="Chapter10.h" />
+    <ClInclude Include="Chapter11.h" />
     <ClInclude Include="Chapter2n3.h" />
     <ClInclude Include="Chapter4.h" />
     <ClInclude Include="Chapter5n6.h" />
@@ -163,8 +166,11 @@
     <ClInclude Include="Chapter8.h" />
     <ClInclude Include="Chapter9.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="cVec3.h" />
+    <ClInclude Include="ExTime.h" />
     <ClInclude Include="ItemResultTable.h" />
     <ClInclude Include="ItemTable.h" />
+    <ClInclude Include="MathSH.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="stock00.h" />
     <ClInclude Include="Timer.h" />

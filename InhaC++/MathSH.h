@@ -13,5 +13,5 @@ public:
 	}
 private:
 public:
-	static constexpr double pi = 3.14159265358979;
+	static constexpr double PI = 3.14159265358979;
 };

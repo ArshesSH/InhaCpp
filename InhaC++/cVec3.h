@@ -104,7 +104,7 @@ public:
 	}
 	static T Angle( const cVec3& lhs, const cVec3& rhs ) 
 	{
-		return Radian( lhs, rhs )* (180 / MathSH::pi);
+		return Radian( lhs, rhs )* (180 / MathSH::PI);
 	}
 
 	friend cVec3 operator*( T n, const cVec3& rhs )

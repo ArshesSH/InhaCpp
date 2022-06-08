@@ -166,16 +166,23 @@
     <ClInclude Include="Chapter8.h" />
     <ClInclude Include="Chapter9.h" />
     <ClInclude Include="Circle.h" />
+    <ClInclude Include="Circle2D.h" />
     <ClInclude Include="cVec3.h" />
     <ClInclude Include="ExTime.h" />
     <ClInclude Include="ItemResultTable.h" />
     <ClInclude Include="ItemTable.h" />
     <ClInclude Include="MathSH.h" />
+    <ClInclude Include="MyPoint.h" />
     <ClInclude Include="Rect.h" />
+    <ClInclude Include="Rect2D.h" />
     <ClInclude Include="stock00.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

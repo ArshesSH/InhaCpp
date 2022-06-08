@@ -3,6 +3,6 @@
 
 int main()
 {
-	Chapter11::ExVector();
+	Chapter11::Question3();
 	return 0;
 }

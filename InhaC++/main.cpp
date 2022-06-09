@@ -1,8 +1,7 @@
-#include <iostream>
-#include "Chapter11.h"
-
+#include "Chapter12.h"
+#include <vld.h>
 int main()
 {
-	Chapter11::Question3();
+	Chapter12::UpgradeMyString();
 	return 0;
 }

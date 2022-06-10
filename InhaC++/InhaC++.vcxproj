@@ -152,6 +152,7 @@
     <ClCompile Include="Chapter10.cpp" />
     <ClCompile Include="Chapter11.cpp" />
     <ClCompile Include="Chapter12.cpp" />
+    <ClCompile Include="Chapter13.cpp" />
     <ClCompile Include="Chapter2n3.cpp" />
     <ClCompile Include="Chapter4.cpp" />
     <ClCompile Include="Chapter5n6.cpp" />
@@ -159,17 +160,20 @@
     <ClCompile Include="Chapter8.cpp" />
     <ClCompile Include="Chapter9.cpp" />
     <ClCompile Include="ExTime.cpp" />
+    <ClCompile Include="GeometricObject.cpp" />
     <ClCompile Include="ItemResultTable.cpp" />
     <ClCompile Include="ItemTable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyString.cpp" />
     <ClCompile Include="stock00.cpp" />
+    <ClCompile Include="TableTennisPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Account.h" />
     <ClInclude Include="Chapter10.h" />
     <ClInclude Include="Chapter11.h" />
     <ClInclude Include="Chapter12.h" />
+    <ClInclude Include="Chapter13.h" />
     <ClInclude Include="Chapter2n3.h" />
     <ClInclude Include="Chapter4.h" />
     <ClInclude Include="Chapter5n6.h" />
@@ -180,6 +184,7 @@
     <ClInclude Include="Circle2D.h" />
     <ClInclude Include="cVec3.h" />
     <ClInclude Include="ExTime.h" />
+    <ClInclude Include="GeometricObject.h" />
     <ClInclude Include="ItemResultTable.h" />
     <ClInclude Include="ItemTable.h" />
     <ClInclude Include="MathSH.h" />
@@ -188,6 +193,7 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Rect2D.h" />
     <ClInclude Include="stock00.h" />
+    <ClInclude Include="TableTennisPlayer.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />

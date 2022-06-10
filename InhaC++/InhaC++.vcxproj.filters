@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="헤더 파일\Chapter13">
+      <UniqueIdentifier>{afbbf50f-6240-4763-8628-c88e313fc176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Chapter13">
+      <UniqueIdentifier>{36bcf282-1436-43da-9d45-6945ff1fadeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -61,6 +67,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="MyString.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Chapter13.cpp">
+      <Filter>소스 파일\Chapter13</Filter>
+    </ClCompile>
+    <ClCompile Include="TableTennisPlayer.cpp">
+      <Filter>소스 파일\Chapter13</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometricObject.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -138,6 +153,15 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="MyString.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Chapter13.h">
+      <Filter>헤더 파일\Chapter13</Filter>
+    </ClInclude>
+    <ClInclude Include="TableTennisPlayer.h">
+      <Filter>헤더 파일\Chapter13</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometricObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

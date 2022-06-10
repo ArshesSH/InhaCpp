@@ -1,7 +1,7 @@
-#include "Chapter12.h"
+#include "Chapter13.h"
 #include <vld.h>
 int main()
 {
-	Chapter12::UpgradeMyString();
+	Chapter13::ExInheritance();
 	return 0;
 }

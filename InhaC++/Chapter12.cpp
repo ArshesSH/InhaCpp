@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include "MyString.h"
-#include <crtdbg.h>
 
 void CallByRef( MyString& src )
 {
@@ -116,4 +115,3 @@ void Chapter12::UpgradeMyString()
 	}
 	std::cout << "프로그램을 종료합니다.\n";
 }
-

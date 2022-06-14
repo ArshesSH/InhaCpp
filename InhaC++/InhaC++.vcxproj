@@ -160,13 +160,14 @@
     <ClCompile Include="Chapter8.cpp" />
     <ClCompile Include="Chapter9.cpp" />
     <ClCompile Include="ExTime.cpp" />
-    <ClCompile Include="GeometricObject.cpp" />
     <ClCompile Include="ItemResultTable.cpp" />
     <ClCompile Include="ItemTable.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MyString.cpp" />
     <ClCompile Include="stock00.cpp" />
+    <ClCompile Include="StopWatch.cpp" />
     <ClCompile Include="TableTennisPlayer.cpp" />
+    <ClCompile Include="Worker.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Account.h" />
@@ -193,10 +194,12 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Rect2D.h" />
     <ClInclude Include="stock00.h" />
+    <ClInclude Include="StopWatch.h" />
     <ClInclude Include="TableTennisPlayer.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Vec2.h" />
     <ClInclude Include="Vec3.h" />
+    <ClInclude Include="Worker.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

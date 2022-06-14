@@ -2,7 +2,6 @@
 
 int main()
 {
-	Chapter13 c1;
-	c1.Question1();
+	Chapter13::Question3();
 	return 0;
 }

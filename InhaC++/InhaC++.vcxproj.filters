@@ -75,8 +75,11 @@
     <ClCompile Include="TableTennisPlayer.cpp">
       <Filter>소스 파일\Chapter13</Filter>
     </ClCompile>
-    <ClCompile Include="GeometricObject.cpp">
+    <ClCompile Include="StopWatch.cpp">
       <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Worker.cpp">
+      <Filter>소스 파일\Chapter13</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +166,12 @@
     </ClInclude>
     <ClInclude Include="GeometricObject.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="StopWatch.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Worker.h">
+      <Filter>헤더 파일\Chapter13</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

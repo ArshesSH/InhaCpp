@@ -330,6 +330,136 @@ void Chapter13::TestWorkerVirtual()
 * бр бр бр бр бр бр бр бр
 */
 
+class QueenMap
+{
+private:
+	class Tile
+	{
+	public:
+		enum class State
+		{
+			Empty,
+			Visited,
+			HasQueen
+		};
+	public:
+		void SetEmpty()
+		{
+			state = State::Empty;
+		}
+		void SetVisited()
+		{
+			state = State::Visited;
+		}
+		void SetHasQueen()
+		{
+			state = State::HasQueen;
+		}
+		State GetState() const
+		{
+			return state;
+		}
+	private:
+		State state = State::Empty;
+	};
+
+public:
+	QueenMap(int size)
+		:
+		width(size)
+	{
+		field = std::make_unique<Tile[]>( size * size );
+	} 
+	bool CheckFieldSize(const Vec2<int>& pos) const
+	{
+		return (pos.x >= 0 && pos.x < 8) && (pos.y >= 0 && pos.x < 8);
+	}
+	int FindNextEmpty()
+	{
+		for ( int i = 0; i < width * width; ++i )
+		{
+			if ( field[i].GetState() == Tile::State::Empty )
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	void SetVisitedLineByDir(const Vec2<int>& curPos, const Vec2<int>& dir)
+	{
+		if ( CheckFieldSize( curPos ) )
+		{
+			const int curTilePos = curPos.y * width + curPos.x;
+			if ( field[curTilePos].GetState() == Tile::State::Empty )
+			{
+				field[curTilePos].SetVisited();
+				SetVisitedLineByDir( curPos + dir, dir );
+			}
+		}
+	}
+	void SetMapVisited( const Vec2<int>& pos )
+	{
+		SetVisitedLineByDir( pos, Up );
+		SetVisitedLineByDir( pos, Down );
+		SetVisitedLineByDir( pos, Right );
+		SetVisitedLineByDir( pos, Left );
+		SetVisitedLineByDir( pos, Up + Right );
+		SetVisitedLineByDir( pos, Up + Left );
+		SetVisitedLineByDir( pos, Down + Right );
+		SetVisitedLineByDir( pos, Down + Left );
+	}
+
+	void SetQueen( const Vec2<int>& curPos )
+	{
+		const int curTilePos = curPos.y * width + curPos.x;
+		field[curTilePos].SetHasQueen();
+		SetMapVisited( curPos );
+
+		const int nextTilePos = FindNextEmpty();
+		if ( nextTilePos != -1 )
+		{
+
+		}
+	}
+
+	void PrintField() const
+	{
+		for ( int y = 0; y < width; ++y )
+		{
+			for ( int x = 0; x < width; ++x )
+			{
+				const int pos = y * width + x;
+				const Tile::State state = field[pos].GetState();
+				if ( state == Tile::State::Empty )
+				{
+					std::cout << "б█";
+				}
+				else if ( state == Tile::State::HasQueen )
+				{
+					std::cout << "б┌";
+				}
+				else
+				{
+					std::cout << "б▌";
+				}
+			}
+			std::cout << std::endl;
+		}
+		std::cout << std::endl;
+	}
+
+private:
+	const Vec2<int> Up { 0, 1 };
+	const Vec2<int> Down{ 0, -1 };
+	const Vec2<int> Right{ 1,0 };
+	const Vec2<int> Left{ -1,0 };
+	const int width;
+	std::unique_ptr<Tile[]> field;
+	int queenCount = 0;
+};
+
+
+
 void PrintVistiedMap( const std::bitset<64>& visitedMap, const Vec2<int>& queenPos, int boardSize = 8 )
 {
 	system( "cls" );
@@ -372,7 +502,7 @@ void SetMapTrueByDir( std::bitset<64>& visitedMap, const Vec2<int>& curPos, cons
 	SetMapTrueByDir( visitedMap, nextPos, dir, boardSize );
 }
 
-int SetMapTrueByQueenPos( std::bitset<64>& visitedMap, const Vec2<int>& queenPos, int boardSize = 8 )
+void SetMapTrueByQueenPos( std::bitset<64>& visitedMap, const Vec2<int>& queenPos, int boardSize = 8 )
 {
 	const Vec2<int> up = { 0, -1 };
 	const Vec2<int> down = { 0, 1 };
@@ -415,10 +545,7 @@ std::vector<Vec2<int>> PutEightQueens(std::bitset<64>&visitedMap, int startX, in
 	{
 		return queens;
 	}
-	else
-	{
-		queens = PutEightQueens( visitedMap, nextPos % boardSize, nextPos / boardSize, boardSize );
-	}
+	PutEightQueens( visitedMap, nextPos % boardSize, nextPos / boardSize, boardSize );
 }
 
 void PrintQueens( const std::vector<Vec2<int>> queens, int boardSize = 8)
@@ -467,8 +594,9 @@ void Chapter13::Question3()
 	{
 		for ( int x = 0; x < boardSize; ++x )
 		{
+			std::vector<Vec2<int>> queens;
 			visitedMap.reset();
-			std::vector<Vec2<int>> queens = PutEightQueens( visitedMap, x, y );
+			PutEightQueens( visitedMap, x, y, 8 );
 			if ( queens.size() == 8 )
 			{
 				eightQueensList.push_back( queens );

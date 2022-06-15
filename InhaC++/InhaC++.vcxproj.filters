@@ -173,6 +173,9 @@
     <ClInclude Include="Worker.h">
       <Filter>헤더 파일\Chapter13</Filter>
     </ClInclude>
+    <ClInclude Include="InputReader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

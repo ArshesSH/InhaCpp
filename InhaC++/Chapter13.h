@@ -8,6 +8,8 @@ public:
 	static void TestWorker();
 	static void TestWorkerVirtual();
 	static void Question3();
+	static void Question4();
+	static void ExRTTI();
 private:
 };
 

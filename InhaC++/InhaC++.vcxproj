@@ -186,6 +186,7 @@
     <ClInclude Include="cVec3.h" />
     <ClInclude Include="ExTime.h" />
     <ClInclude Include="GeometricObject.h" />
+    <ClInclude Include="InputReader.h" />
     <ClInclude Include="ItemResultTable.h" />
     <ClInclude Include="ItemTable.h" />
     <ClInclude Include="MathSH.h" />

@@ -5,12 +5,18 @@
 
 #include <memory>
 #include <vector>
+#include <random>
 #include "GeometricObject.h"
 #include "StopWatch.h"
 #include "Worker.h"
 
-#include <Windows.h>
 #include <bitset>
+#include <fstream>
+#include <algorithm>
+#include <sstream>
+#include "InputReader.h"
+
+#define NOMINMAX
 
 void Chapter13::ExInheritance()
 {
@@ -343,6 +349,7 @@ private:
 			HasQueen
 		};
 	public:
+		Tile() {};
 		void SetEmpty()
 		{
 			state = State::Empty;
@@ -359,45 +366,60 @@ private:
 		{
 			return state;
 		}
+		bool IsEmpty() const
+		{
+			return state == State::Empty;
+		}
+		bool IsVisited() const
+		{
+			return state == State::Visited;
+		}
+		bool IsHasQueen() const
+		{
+			return state == State::HasQueen;
+		}
 	private:
 		State state = State::Empty;
 	};
 
 public:
-	QueenMap(int size)
+	QueenMap( int size )
 		:
-		width(size)
+		width( size ),
+		fieldSize( size* size )
 	{
-		field = std::make_unique<Tile[]>( size * size );
+		field.reserve( fieldSize );
+		field.assign( width * width, Tile() );
 	} 
 	bool CheckFieldSize(const Vec2<int>& pos) const
 	{
-		return (pos.x >= 0 && pos.x < 8) && (pos.y >= 0 && pos.x < 8);
+		return (pos.x >= 0 && pos.x < width) && (pos.y >= 0 && pos.y < width);
 	}
 	int FindNextEmpty()
 	{
 		for ( int i = 0; i < width * width; ++i )
 		{
-			if ( field[i].GetState() == Tile::State::Empty )
+			if ( field[i].IsEmpty())
 			{
 				return i;
 			}
 		}
 		return -1;
 	}
-	void SetVisitedLineByDir(const Vec2<int>& curPos, const Vec2<int>& dir)
+	void SetVisitedLineByDir(const Vec2<int>& lastPos, const Vec2<int>& dir)
 	{
+		const Vec2<int>& curPos = lastPos + dir;
 		if ( CheckFieldSize( curPos ) )
 		{
 			const int curTilePos = curPos.y * width + curPos.x;
-			if ( field[curTilePos].GetState() == Tile::State::Empty )
+			if ( field[curTilePos].IsEmpty() || field[curTilePos].IsVisited() )
 			{
 				field[curTilePos].SetVisited();
-				SetVisitedLineByDir( curPos + dir, dir );
+				SetVisitedLineByDir( curPos, dir );
 			}
 		}
 	}
-	void SetMapVisited( const Vec2<int>& pos )
+	void SetMapVisitedFrom( const Vec2<int>& pos )
 	{
 		SetVisitedLineByDir( pos, Up );
 		SetVisitedLineByDir( pos, Down );
@@ -408,20 +430,26 @@ public:
 		SetVisitedLineByDir( pos, Down + Right );
 		SetVisitedLineByDir( pos, Down + Left );
 	}
-
 	void SetQueen( const Vec2<int>& curPos )
 	{
 		const int curTilePos = curPos.y * width + curPos.x;
+		
 		field[curTilePos].SetHasQueen();
-		SetMapVisited( curPos );
-
-		const int nextTilePos = FindNextEmpty();
-		if ( nextTilePos != -1 )
+		queenCount++;
+		SetMapVisitedFrom( curPos );
+		PrintField();
+		auto savedField = field;
+		for (int i = 0; i < fieldSize; ++i )
 		{
-
+			if ( savedField[i].IsEmpty() )
+			{
+				const Vec2<int> nextPos = { i % width, i / width };
+				SetQueen( nextPos );
+				field = savedField;
+				queenCount--;
+			}
 		}
 	}
-
 	void PrintField() const
 	{
 		for ( int y = 0; y < width; ++y )
@@ -429,12 +457,11 @@ public:
 			for ( int x = 0; x < width; ++x )
 			{
 				const int pos = y * width + x;
-				const Tile::State state = field[pos].GetState();
-				if ( state == Tile::State::Empty )
+				if ( field[pos].IsEmpty() )
 				{
 					std::cout << "○";
 				}
-				else if ( state == Tile::State::HasQueen )
+				else if ( field[pos].IsHasQueen())
 				{
 					std::cout << "★";
 				}
@@ -445,170 +472,265 @@ public:
 			}
 			std::cout << std::endl;
 		}
+		std::cout << queenCount <<"개" << std::endl;
+	}
+	void PrintField(const std::vector<Tile>& target) const
+	{
+		for ( int y = 0; y < width; ++y )
+		{
+			for ( int x = 0; x < width; ++x )
+			{
+				const int pos = y * width + x;
+				if ( target[pos].IsEmpty() )
+				{
+					std::cout << "○";
+				}
+				else if ( target[pos].IsHasQueen() )
+				{
+					std::cout << "★";
+				}
+				else
+				{
+					std::cout << "◎";
+				}
+			}
+			std::cout << std::endl;
+		}
+		std::cout << queenCount << "개" << std::endl;
+	}
+	void PrintQueens() const
+	{
+		for ( int y = 0; y < width; ++y )
+		{
+			for ( int x = 0; x < width; ++x )
+			{
+				const int pos = y * width + x;
+				if ( field[pos].IsHasQueen() )
+				{
+					std::cout << "■";
+				}
+				else
+				{
+					std::cout << "□";
+				}
+			}
+			std::cout << std::endl;
+		}
 		std::cout << std::endl;
 	}
-
+	std::vector<Tile> GetField() const
+	{
+		return field;
+	}
 private:
-	const Vec2<int> Up { 0, 1 };
-	const Vec2<int> Down{ 0, -1 };
+	const Vec2<int> Up { 0, -1 };
+	const Vec2<int> Down{ 0, 1 };
 	const Vec2<int> Right{ 1,0 };
 	const Vec2<int> Left{ -1,0 };
 	const int width;
-	std::unique_ptr<Tile[]> field;
+	const int fieldSize = width * width;
+	std::vector<Tile> field;
 	int queenCount = 0;
 };
 
-
-
-void PrintVistiedMap( const std::bitset<64>& visitedMap, const Vec2<int>& queenPos, int boardSize = 8 )
-{
-	system( "cls" );
-	for ( int y = 0; y < boardSize; ++y )
-	{
-		for ( int x = 0; x < boardSize; ++x )
-		{
-			const int curPos = y * boardSize + x;
-			if ( Vec2<int>{x,y} == queenPos )
-			{
-				std::cout << "★ ";
-			}
-			else if ( visitedMap[curPos])
-			{
-				std::cout << "● ";
-			}
-			else
-			{
-				std::cout << "○ ";
-			}
-		}
-		std::cout << "\n" << std::endl;
-	}
-	std::cout << "\n" << std::endl;
-}
-
-void SetMapTrueByDir( std::bitset<64>& visitedMap, const Vec2<int>& curPos, const Vec2<int>& dir, int boardSize = 8 )
-{
-	// Check cur pos to true
-	const int curMapPos = curPos.y * boardSize + curPos.x;
-	visitedMap[curMapPos] = true;
-
-	const Vec2<int> nextPos = curPos + dir;
-	const int nextMapPos = nextPos.y * boardSize + nextPos.x;
-
-	if ( nextPos.x >= boardSize || nextPos.x < 0 || nextPos.y < 0 || nextPos.y >= boardSize )
-	{
-		return;
-	}
-	SetMapTrueByDir( visitedMap, nextPos, dir, boardSize );
-}
-
-void SetMapTrueByQueenPos( std::bitset<64>& visitedMap, const Vec2<int>& queenPos, int boardSize = 8 )
-{
-	const Vec2<int> up = { 0, -1 };
-	const Vec2<int> down = { 0, 1 };
-	const Vec2<int> left = { -1, 0 };
-	const Vec2<int> right = { 1, 0 };
-
-	int count = 0;
-
-	// Set Dir
-	SetMapTrueByDir( visitedMap, queenPos, up, boardSize );
-	SetMapTrueByDir( visitedMap, queenPos, down, boardSize );
-	SetMapTrueByDir( visitedMap,  queenPos, left, boardSize );
-	SetMapTrueByDir( visitedMap, queenPos, right, boardSize );
-	SetMapTrueByDir( visitedMap, queenPos, up + left, boardSize );
-	SetMapTrueByDir( visitedMap, queenPos, up + right, boardSize );
-	SetMapTrueByDir( visitedMap, queenPos, down + left, boardSize );
-	SetMapTrueByDir( visitedMap, queenPos, down + right, boardSize );
-
-
-	//std::cout << "Move DownRight\n";
-	//PrintVistiedMap( visitedMap, queenPos );
-}
-
-std::vector<Vec2<int>> PutEightQueens(std::bitset<64>&visitedMap, int startX, int startY, int queenCnt, int boardSize = 8)
-{
-	std::vector<Vec2<int>> queens;
-	queens.emplace_back( startX, startY );
-	SetMapTrueByQueenPos( visitedMap, queens[queens.size() - 1] );
-
-	int nextPos = 0;
-	for ( nextPos = 0; nextPos < visitedMap.size(); ++nextPos )
-	{
-		if ( visitedMap[nextPos] == false )
-		{
-			 break;
-		}
-	}
-
-	if ( queenCnt == 8 )
-	{
-		return queens;
-	}
-	PutEightQueens( visitedMap, nextPos % boardSize, nextPos / boardSize, boardSize );
-}
-
-void PrintQueens( const std::vector<Vec2<int>> queens, int boardSize = 8)
-{
-	int curQueenCnt = 0;
-	for ( int y = 0; y < boardSize; ++y )
-	{
-		for ( int x = 0; x < boardSize; ++x )
-		{
-			const Vec2<int> curPos( x, y );
-
-			bool isInList = false;
-
-			for ( const auto e : queens )
-			{
-				if ( e == curPos )
-				{
-					isInList = true;
-					break;
-				}
-			}
-
-			if ( isInList )
-			{
-				std::cout << "■ ";
-				curQueenCnt++;
-			}
-			else
-			{
-				std::cout << "□ ";
-			}
-		}
-		std::cout << "\n" << std::endl;
-	}
-}
-
 void Chapter13::Question3()
 {
-	constexpr static int boardSize = 8;
-	
-	std::vector<std::vector<Vec2<int>>> eightQueensList;
+	std::vector<QueenMap> eightQueenList;
 
-	std::bitset<64> visitedMap = false;
-
-	for ( int y = 0; y < boardSize; ++y )
+	constexpr int fieldSize = 8;
+	for ( int y = 0; y < fieldSize; ++y )
 	{
-		for ( int x = 0; x < boardSize; ++x )
+		for ( int x = 0; x < fieldSize; ++x )
 		{
-			std::vector<Vec2<int>> queens;
-			visitedMap.reset();
-			PutEightQueens( visitedMap, x, y, 8 );
-			if ( queens.size() == 8 )
-			{
-				eightQueensList.push_back( queens );
-			}
+			QueenMap queenField( fieldSize );
+			queenField.SetQueen( { x,y } );
 		}
 	}
 
-	for ( const auto e : eightQueensList )
+}
+
+/*
+서울시에 일직선 모양의 새로운 도로가 생겼다.새로운 도로의 전체 길이는 l 이고 도로에는 총 n 개의 가로등이 세워졌다.
+이 도로의 모든 가로등에 전구를 사서 달려고 한다.전구를 선택하는 기준은 다음과 같다.
+1. 전구는 길의 좌측, 우측 방향으로 각각 d길이 만큼 길을 밝힐 수 있다.d 는 자연수
+2. 모든 가로등에는 같은 종류( d값이 같은 )의 전구를 달아야 한다.
+3. 안전을 위하여 도로위에 어두운 부분이 있어서는 안된다.
+
+이때, d값이 충분히 크다면 전체 도로를 밝게 비출 수 있지만, d값이 작아진다면 도로 위에 빛이 닿지 않는 부분이 생길 수도 있다.
+따라서, 도로 위에 어두운 부분이 생기지 않도록 하는 d값 중 최솟값을 구하려고 한다.
+전체 도로의 길이 l, 가로등이 새워져 있는 위치가 들어있는 배열 v 가 매개변수로 주어질 때, 위의 모든 조건을 만족하는 d의 최솟값을 return 하도록 solution 함수를 완성하라.
+
+
+제한사항
+- l은 1 이상 1,000,000,000 이하의 자연수
+- v 에는 가로등의 위치정보가 들어있다.
+- 가로등의 위치는0 이상 l 이하의 정수이며, 같은 위치에 2개 이상의 가로등이 있는 경우는 주어지지 않는다.
+- 가로등의 개수는1 이상 1,000 이하의 자연수
+*/
+
+inline bool CheckLight( int curRight, int nextLeft )
+{
+	return nextLeft <= curRight;
+}
+
+int GetMinLightLength(int roadLength, std::vector<int> v )
+{
+	int minDist = 0;
+	roadLength++;
+	
+	std::sort( v.begin(), v.end() );
+
+	for ( ; minDist < roadLength; ++minDist )
 	{
-		PrintQueens( e );
+		bool isLighted = true;
+		int curPos = 0;
+		int nextPos = 1;
+
+		int curLeft = (std::max)(0, v[curPos] - minDist);
+		int curRight;
+		int nextLeft = (std::max)(0, v[nextPos] - minDist);
+		int nextRight;
+		isLighted &= CheckLight( 0, curLeft );
+		for ( ; nextPos < v.size() - 1; ++curPos, ++nextPos )
+		{
+			curRight = (std::min)(roadLength - 1, v[curPos] + minDist);
+			nextLeft = (std::max)(0, v[nextPos] - minDist);
+			isLighted &= CheckLight( curRight, nextLeft );
+			if ( isLighted == false )
+			{
+				break;
+			}
+		}
+		nextRight = (std::min)(roadLength - 1, v[nextPos] + minDist);
+		isLighted &= CheckLight( nextRight, roadLength-1);
+
+		if ( isLighted )
+		{
+			return minDist;
+		}
+	}
+	return minDist;
+}
+
+void Chapter13::Question4()
+{
+	InputReader text( L"text\\C13Q4.txt" );
+	auto inputLine = text.GetLineVector();
+
+	for ( int i = 0; i < inputLine.size(); i += 2 )
+	{
+		int l = stoi( inputLine[i] );
+		std::stringstream ss( inputLine[i + 1] );
+		std::vector<int> v;
+
+		int n;
+		while ( ss >> n ) {
+			v.push_back( n );
+		}
+
+		StopWatch timer;
+		const int answer = GetMinLightLength( l, v );
+		timer.Stop();
+
+		std::cout << "l = " << l <<std::endl;
+		std::cout << "List : ";
+		for ( const auto n : v )
+		{
+			std::cout << n << " ";
+		}
+		std::cout << std::endl;
+		std::cout << "최소길이 = " << answer << ", 걸린시간 : " << timer.GetElapsedTime<double, (int)StopWatch::TimeUnit::Milli>() << "ms" << std::endl;
 	}
 }
+
+class Grand
+{
+private:
+	int hold;
+public:
+	Grand( int h = 0 )
+		:
+		hold( h )
+	{}
+	virtual void Speak() const
+	{
+		std::cout << "Grand Class\n";
+	}
+	virtual int Value() const
+	{
+		return hold;
+	}
+};
+class Superb : public Grand
+{
+public:
+	Superb( int h = 0 )
+		:
+		Grand( h )
+	{}
+	void Speak() const override
+	{
+		std::cout << "Superb Class\n";
+	}
+	virtual void Say() const
+	{
+		std::cout << "Superb value = " << Value() << std::endl;
+	}
+};
+class Magnificent : public Superb
+{
+private:
+	char ch;
+public:
+	Magnificent( int h = 0, char c = 'A' )
+		:
+		Superb( h ),
+		ch( c )
+	{}
+	void Speak() const override
+	{
+		std::cout << "Magnificent class\n";
+	}
+	void Say() const override
+	{
+		std::cout << "char = " << ch << "value = " << Value() << std::endl;
+	}
+};
+
+Grand* GetOne()
+{
+	Grand* pG = nullptr;
+	switch ( std::rand() % 3 )
+	{
+	case 0:
+		pG = new Grand( std::rand() % 100 );
+		break;
+	case 1:
+		pG = new Superb( std::rand() % 100 );
+		break;
+	case 2:
+		pG = new Magnificent( std::rand() % 100, 'A' + std::rand() % 26 );
+		break;
+	}
+	return pG;
+}
+
+void Chapter13::ExRTTI()
+{
+	std::srand( std::time( 0 ) );
+	Grand* pG;
+	Superb* pS;
+	for ( int i = 0; i < 5; i++ )
+	{
+		pG = GetOne();
+		pG->Speak();
+		if ( pS = dynamic_cast<Superb*>(pG) )
+		{
+			pS->Say();
+		}
+	}
+}
+
 
 
 

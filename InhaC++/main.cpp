@@ -1,7 +1,9 @@
 #include "Chapter13.h"
 
+#include "Chapter16.h"
+
 int main()
 {
-	Chapter13::Question3();
+	Chapter16::Inserts();
 	return 0;
 }

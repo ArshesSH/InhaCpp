@@ -430,15 +430,15 @@ public:
 		SetVisitedLineByDir( pos, Down + Right );
 		SetVisitedLineByDir( pos, Down + Left );
 	}
-	void SetQueen( const Vec2<int>& curPos )
+	bool SetQueen( const Vec2<int>& curPos )
 	{
 		const int curTilePos = curPos.y * width + curPos.x;
-		
 		field[curTilePos].SetHasQueen();
 		queenCount++;
+
 		SetMapVisitedFrom( curPos );
-		PrintField();
 		auto savedField = field;
+		PrintField( savedField );
 		for (int i = 0; i < fieldSize; ++i )
 		{
 			if ( savedField[i].IsEmpty() )
@@ -446,9 +446,16 @@ public:
 				const Vec2<int> nextPos = { i % width, i / width };
 				SetQueen( nextPos );
 				field = savedField;
+				if ( queenCount == 8 )
+				{
+					PrintField( savedField );
+					return true;
+				}
 				queenCount--;
 			}
 		}
+
+		return false;
 	}
 	void PrintField() const
 	{
@@ -543,7 +550,10 @@ void Chapter13::Question3()
 		for ( int x = 0; x < fieldSize; ++x )
 		{
 			QueenMap queenField( fieldSize );
-			queenField.SetQueen( { x,y } );
+			if ( queenField.SetQueen( { x,y } ) )
+			{
+				eightQueenList.push_back( queenField );
+			}
 		}
 	}
 

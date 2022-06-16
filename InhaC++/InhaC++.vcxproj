@@ -153,6 +153,7 @@
     <ClCompile Include="Chapter11.cpp" />
     <ClCompile Include="Chapter12.cpp" />
     <ClCompile Include="Chapter13.cpp" />
+    <ClCompile Include="Chapter16.cpp" />
     <ClCompile Include="Chapter2n3.cpp" />
     <ClCompile Include="Chapter4.cpp" />
     <ClCompile Include="Chapter5n6.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Chapter11.h" />
     <ClInclude Include="Chapter12.h" />
     <ClInclude Include="Chapter13.h" />
+    <ClInclude Include="Chapter16.h" />
     <ClInclude Include="Chapter2n3.h" />
     <ClInclude Include="Chapter4.h" />
     <ClInclude Include="Chapter5n6.h" />

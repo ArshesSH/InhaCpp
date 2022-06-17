@@ -4,6 +4,6 @@
 
 int main()
 {
-	Chapter16::Inserts();
+	Chapter16::Question2();
 	return 0;
 }

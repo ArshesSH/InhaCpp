@@ -7,5 +7,9 @@ public:
 	static void ExVectorClass();
 	static void CopyIt();
 	static void Inserts();
+	static void EXWrite();
+	static void CheckIt();
+	static void ExFileIO();
+	static void Question2();
 };
 

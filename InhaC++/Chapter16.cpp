@@ -8,6 +8,8 @@
 #include <memory>
 #include <algorithm>
 #include <iterator>
+#include <fstream>
+#include "FileSplitter.h"
 
 /*
 * 홀수의 양의 정수 k 가 주어졌을 때
@@ -322,3 +324,102 @@ void Chapter16::Inserts()
 	for_each( words.begin(), words.end(), Output );
 	cout << endl;
 }
+
+void Chapter16::EXWrite()
+{
+	using std::cout;
+	using std::endl;
+	const char* state1 = "Florida";
+	const char* state2 = "kansas";
+	const char* state3 = "euphoria";
+	int len = std::strlen( state3 );
+	cout << "루프 인덱스 증가:\n";
+	int i;
+	for ( i = 1; i <= len; i++ )
+	{
+		cout.write( state3, i );
+		cout << endl;
+	}
+
+	cout << "루프 인덱스 감소:\n";
+	for ( i = len; i > 0; i-- )
+	{
+		cout.write( state3, i ) << endl;
+	}
+	cout << "문자열 길이 초과:\n";
+	cout.write( state3, len + 5 ) << endl;
+}
+
+void Chapter16::CheckIt()
+{
+	using namespace std;
+	cout << "수를 입력하십시오: ";
+	int sum = 0;
+	int input;
+	while ( cin >> input )
+	{
+		sum += input;
+		cout << "현재 input = " << input << endl;
+	}
+	cout << "마지막으로 입력한 값 = " << input << endl;
+	cout << "합계 = " << sum << endl;
+	
+}
+
+void Chapter16::ExFileIO()
+{
+	using namespace std;
+	string filename;
+	cout << "새 파일을 위한 이름ㅇ르 입력하십시오: ";
+	cin >> filename;
+
+	ofstream fout( filename.c_str() );
+	fout << "비밀번호 노출에 주의하십시오.\n";
+	cout << "비밀번호를 입력하십시오: ";
+	float password;
+	cin >> password;
+	fout << " 귀하의 비밀번호는 " << password << "입니다.\n";
+	fout.close();
+
+	ifstream fin( filename.c_str() );
+	cout << filename << " 파일의 내용은 다음과 같습니다:\n";
+	char ch;
+	while ( fin.get( ch ) )
+	{
+		cout << ch;
+	}
+	cout << "프로그램을 종료합니다.\n";
+	fin.close();
+}
+
+/*
+* 용량이 큰 파일을 작은 용량으로 분할하는 유틸리티
+* 사용자로부터 소스 파일명을 입력받은 후 각각 분할된 작은 파일의 바이트 값을 입력받음
+* ex> Enter file name : test.zip
+* Enter file size : 1024
+* -> File test.zip.01
+* -> File test.zip.02
+* -> File test.zip.03
+* Split Done.
+*/
+
+
+void Chapter16::Question2()
+{
+	std::cout << "ENter file name :";
+	std::string filename;
+	std::cin >> filename;
+	FileSplitter fileSplitter( filename );
+	fileSplitter.Split( 3 );
+}
+
+/*
+* 사용자로 부터 소스 파일의 개수, 소스 파일의 이름, 목적 파일의 이름을 입력받아
+* 새로운 하나의 파일로 파일을 조합하는 프로그램
+* ex >	Enter file number: 3
+*		Enter source file name: test.zip.01
+*		Enter source file name: test.zip.02
+*		Enter source file name: test.zip.03
+*		Enter Target file name : test.zip
+*		combine done.
+*/

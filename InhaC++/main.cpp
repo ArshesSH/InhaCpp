@@ -1,9 +1,7 @@
-#include "Chapter13.h"
-
-#include "Chapter16.h"
+#include "Day0620.h"
 
 int main()
 {
-	Chapter16::Question2();
+	Day0620::Question2();
 	return 0;
 }

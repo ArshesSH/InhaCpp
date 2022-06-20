@@ -10,6 +10,7 @@ public:
 	static void Question3();
 	static void Question4();
 	static void ExRTTI();
+	static void QueenRetry();
 private:
 };
 

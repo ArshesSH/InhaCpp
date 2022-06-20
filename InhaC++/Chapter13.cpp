@@ -741,6 +741,69 @@ void Chapter13::ExRTTI()
 	}
 }
 
+void PrintBoard( const std::vector<bool>& queenList, int boardWidth )
+{
+	for ( int y = 0; y < boardWidth; ++y )
+	{
+		for ( int x = 0; x < boardWidth; ++x )
+		{
+			const int pos = y * boardWidth + x;
+			if ( queenList[pos] )
+			{
+				std::cout << "бс ";
+			}
+			else
+			{
+				std::cout << "бр ";
+			}
+		}
+		std::cout << "\n" << std::endl;
+	}
+
+}
+
+bool CheckBoard( int cnt, const std::vector<int>& visitList )
+{
+	for ( int y = 0; y < cnt; ++y )
+	{
+		if ( visitList[cnt] == visitList[y] || cnt - y == abs( visitList[cnt] - visitList[y] ) )
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+void SetQueen( int cnt, int maxCnt, std::vector<int>& visitList, std::vector<bool>& queenList )
+{
+	if ( cnt == maxCnt )
+	{
+		PrintBoard( queenList, maxCnt );
+		return;
+	}
+	for ( int x = 0; x < maxCnt; ++x )
+	{
+		visitList[cnt] = x;
+		if ( CheckBoard( cnt, visitList ) )
+		{
+			queenList[cnt] = true;
+			PrintBoard( queenList, maxCnt );
+			SetQueen( ++cnt, maxCnt, visitList, queenList );
+		}
+	}
+}
+
+void Chapter13::QueenRetry()
+{
+	constexpr int maxCnt = 8;
+	const int boardSize = maxCnt * maxCnt;
+	std::vector<int> visitList( boardSize );
+	std::vector<bool> queenList;
+	queenList.assign( boardSize, false );
+	SetQueen( 0, maxCnt, visitList, queenList );
+
+}
+
 
 
 

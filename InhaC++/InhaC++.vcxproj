@@ -164,6 +164,9 @@
     <ClCompile Include="Chapter7.cpp" />
     <ClCompile Include="Chapter8.cpp" />
     <ClCompile Include="Chapter9.cpp" />
+    <ClCompile Include="Day0620.cpp" />
+    <ClCompile Include="Decoder.cpp" />
+    <ClCompile Include="Encoder.cpp" />
     <ClCompile Include="ExTime.cpp" />
     <ClCompile Include="FileSplitter.cpp" />
     <ClCompile Include="ItemResultTable.cpp" />
@@ -191,6 +194,9 @@
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Circle2D.h" />
     <ClInclude Include="cVec3.h" />
+    <ClInclude Include="Day0620.h" />
+    <ClInclude Include="Decoder.h" />
+    <ClInclude Include="Encoder.h" />
     <ClInclude Include="ExTime.h" />
     <ClInclude Include="FileSplitter.h" />
     <ClInclude Include="GeometricObject.h" />
